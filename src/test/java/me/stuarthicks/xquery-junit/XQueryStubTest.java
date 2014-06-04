@@ -1,3 +1,5 @@
+package me.stuarthicks.xquery-junit;
+
 import static example.XQueryTestHelper.evaluateXQuery;
 import static example.XQueryTestHelper.mockXQueryFunction;
 import static net.sf.saxon.s9api.ItemType.STRING;
