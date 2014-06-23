@@ -38,7 +38,7 @@ public class XQueryStubTest {
     String result = testHelper.evaluateXQuery(proc, "/hello.xqy").toString();
     assertEquals("Hello World!", result);
 
-    verify(hello).call(new XdmValue[] {});
+    verify(hello).call(PARAMS_NONE);
   }
 
 }

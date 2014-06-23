@@ -13,10 +13,10 @@ import org.apache.commons.io.IOUtils;
 public class XQueryTestHelper {
 
   public static ExtensionFunction mockXQueryFunction(String namespaceURI, String localPart, SequenceType[] argumentTypes, SequenceType resultType) {
-    ExtensionFunction func = mock(ExtensionFunction.class);
-    when(func.getName()).thenReturn(new QName(namespaceURI, localPart));
-    when(func.getArgumentTypes()).thenReturn(argumentTypes);
-    when(func.getResultType()).thenReturn(resultType);
+    ExtensionFunction func = Mockito.mock(ExtensionFunction.class);
+    Mockito.when(func.getName()).thenReturn(new QName(namespaceURI, localPart));
+    Mockito.when(func.getArgumentTypes()).thenReturn(argumentTypes);
+    Mockito.when(func.getResultType()).thenReturn(resultType);
     return func;
   }
 
