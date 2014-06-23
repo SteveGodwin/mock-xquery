@@ -1,44 +1,36 @@
 package me.stuarthicks.xqueryjunit;
 
-import static me.stuarthicks.xqueryjunit.XQueryTestHelper.mockXQueryFunction;
-import static net.sf.saxon.s9api.ItemType.STRING;
-import static net.sf.saxon.s9api.OccurrenceIndicator.ONE;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import net.sf.saxon.s9api.ExtensionFunction;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmAtomicValue;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import net.sf.saxon.s9api.ExtensionFunction;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.SequenceType;
-import net.sf.saxon.s9api.XdmAtomicValue;
-import net.sf.saxon.s9api.XdmValue;
-
-import org.junit.Test;
-import me.stuarthicks.xqueryjunit.XQueryTestHelper;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class XQueryStubTest {
 
-    private static final SequenceType[] ARGUMENTS_NONE = new SequenceType[]{};
-    private static final SequenceType RETURNS_STRING = SequenceType.makeSequenceType(STRING, ONE);
-    private static final XdmValue[] PARAMS_NONE = new XdmValue[]{};
+    private XQueryTestHelper xq;
 
-    private XQueryTestHelper testHelper = new XQueryTestHelper();
+    @Before
+    public void before() {
+        this.xq = new XQueryTestHelper();
+    }
 
-  @Test
-  public void test() throws SaxonApiException, IOException {
-    ExtensionFunction hello = mockXQueryFunction("http://exmple/", "hello", ARGUMENTS_NONE, RETURNS_STRING);
+    @Test
+    public void itShouldMockNoArgFunctionReturningString() throws SaxonApiException, IOException {
+        ExtensionFunction hello = xq.mockXQueryFunction("http://exmple/", "hello", XQueryConstants.MOCK_ARGUMENTS_NONE, XQueryConstants.RETURNS_SINGLE_STRING);
+        when(hello.call(XQueryConstants.WITH_PARAMS_NONE)).thenReturn(new XdmAtomicValue("Hello World!"));
+        xq.registerXQueryFunction(hello);
 
-    when(hello.call(PARAMS_NONE)).thenReturn(new XdmAtomicValue("Hello World!"));
+        String result = xq.evaluateXQuery("/hello.xqy").toString();
 
-    Processor proc = new Processor(false);
-    proc.registerExtensionFunction(hello);
-
-    String result = testHelper.evaluateXQuery(proc, "/hello.xqy").toString();
-    assertEquals("Hello World!", result);
-
-    verify(hello).call(PARAMS_NONE);
-  }
+        assertEquals("Hello World!", result);
+        verify(hello).call(XQueryConstants.WITH_PARAMS_NONE);
+    }
 
 }
