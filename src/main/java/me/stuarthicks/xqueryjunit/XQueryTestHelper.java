@@ -14,7 +14,15 @@ public final class XQueryTestHelper {
         this.processor = new Processor(false);
     }
 
-    public final ExtensionFunction mockXQueryFunction(String namespaceURI, String localPart, SequenceType[] argumentTypes, SequenceType resultType) {
+    /**
+     * Creates a new extension function using Mockito.
+     * @param namespaceURI Namespace for mock function to exist in
+     * @param localPart Name of xquery function
+     * @param argumentTypes Method signature
+     * @param resultType Method return type
+     * @return
+     */
+    public final ExtensionFunction newMockXQueryFunction(String namespaceURI, String localPart, SequenceType[] argumentTypes, SequenceType resultType) {
         ExtensionFunction func = Mockito.mock(ExtensionFunction.class);
         Mockito.when(func.getName()).thenReturn(new QName(namespaceURI, localPart));
         Mockito.when(func.getArgumentTypes()).thenReturn(argumentTypes);
@@ -22,15 +30,34 @@ public final class XQueryTestHelper {
         return func;
     }
 
+    /**
+     * Registers an XQuery function so that it will be included
+     * in the environment when calling evaluateXQueryFile
+     * @param func Function to include
+     */
     public final void registerXQueryFunction(ExtensionFunction func) {
         this.processor.registerExtensionFunction(func);
     }
 
-    public final XdmValue evaluateXQuery(String fileName) throws SaxonApiException, IOException {
-        XQueryCompiler comp = this.processor.newXQueryCompiler();
-        XQueryExecutable exp = comp.compile(fromResource(fileName));
-        XQueryEvaluator ev = exp.load();
-        return ev.evaluate();
+    /**
+     * Executes an XQuery file (on the classpath) including all registered
+     * mock functions, and returns the resulting document
+     * @param filename Filename as it appears on the classpath
+     * @return Returns result of execution
+     * @throws XQueryException
+     */
+    public final XdmValue evaluateXQueryFile(String filename) throws XQueryException {
+        try {
+            XQueryCompiler comp = this.processor.newXQueryCompiler();
+            XQueryExecutable exp = comp.compile(fromResource(filename));
+            XQueryEvaluator ev = exp.load();
+            return ev.evaluate();
+        } catch (SaxonApiException e) {
+            throw new XQueryException("An error occurred during execution of the document " + filename, e);
+        } catch (IOException e) {
+            throw new XQueryException("An error occurred reading the file " + filename + " from the classpath", e);
+
+        }
     }
 
     private static final String fromResource(final String name) throws IOException {
