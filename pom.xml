@@ -7,7 +7,7 @@
   <version>1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>xquery-junit</name>
+  <name>xqueryjunit</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -24,21 +24,25 @@
     </dependency>
 
     <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+    </dependency>
+
+    <!-- Test -->
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>1.9.5</version>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
