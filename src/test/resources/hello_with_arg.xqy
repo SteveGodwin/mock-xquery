@@ -2,4 +2,4 @@
 
 declare namespace example = "http://example/";
 
-example:hello('World!')
+example:hello("World!")

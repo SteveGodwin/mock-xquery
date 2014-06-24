@@ -1,6 +1,6 @@
 package me.stuarthicks.xqueryjunit;
 
-import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.value.StringValue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,10 +19,11 @@ public class XQueryStubTest {
     public void itShouldMockNoArgFunctionReturningString() throws XQueryException {
         xq.mockXQueryFunction()
                 .withNamespaceURI("http://example/")
+                .withPrefix("example")
                 .withFunctionName("hello")
                 .withFunctionSignature(XQueryConstants.SIGNATURE_ARGUMENTS_NONE)
                 .withReturnType(XQueryConstants.RETURN_TYPE_SINGLE_STRING)
-                .withReturnValue(new XdmAtomicValue("Hello World!"))
+                .withReturnValue(new StringValue("Hello World!"))
                 .done();
 
         String result = xq.evaluateXQueryFile("/hello.xqy").toString();
@@ -35,13 +36,14 @@ public class XQueryStubTest {
     public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
         xq.mockXQueryFunction()
                 .withNamespaceURI("http://example/")
+                .withPrefix("example")
                 .withFunctionName("hello")
                 .withFunctionSignature(XQueryConstants.SIGNATURE_ARGUMENTS_SINGLE_STRING)
                 .withReturnType(XQueryConstants.RETURN_TYPE_SINGLE_STRING)
-                .withReturnValue(new XdmAtomicValue("Hello World!"))
+                .withReturnValue(new StringValue("Hello World!"))
                 .done();
 
-        String result = xq.evaluateXQueryFile("/hello.xqy").toString();
+        String result = xq.evaluateXQueryFile("/hello_with_arg.xqy").toString();
 
         assertEquals("Hello World!", result);
         //verify(hello).call(XQueryConstants.CALLED_WITH_PARAMS_NONE);

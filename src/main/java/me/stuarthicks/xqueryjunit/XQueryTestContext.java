@@ -1,6 +1,14 @@
 package me.stuarthicks.xqueryjunit;
 
+import net.sf.saxon.expr.XPathContext;
+import net.sf.saxon.lib.ExtensionFunctionCall;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.om.Sequence;
+import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.value.AtomicValue;
+import net.sf.saxon.value.SequenceType;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -13,6 +21,11 @@ public final class XQueryTestContext {
         this.processor = new Processor(false);
     }
 
+    /**
+     * Entry point to the creation of an xquery function stub.
+     * Specify all fields then call done().
+     * @return
+     */
     public final MockXQueryFunctionBuilder mockXQueryFunction() {
         return new MockXQueryFunctionBuilder(this.processor);
     }
@@ -42,14 +55,20 @@ public final class XQueryTestContext {
 
         private final Processor processor;
 
+        private String prefix;
         private String namespaceURI;
         private String functionName;
         private SequenceType[] argumentTypes;
         private SequenceType resultType;
-        private XdmValue resultValue;
+        private AtomicValue resultValue;
 
         public MockXQueryFunctionBuilder(Processor processor) {
             this.processor = processor;
+        }
+
+        public MockXQueryFunctionBuilder withPrefix(final String prefix) {
+            this.prefix = prefix;
+            return this;
         }
 
         public MockXQueryFunctionBuilder withNamespaceURI(final String namespace) {
@@ -72,21 +91,20 @@ public final class XQueryTestContext {
             return this;
         }
 
-        public MockXQueryFunctionBuilder withReturnValue(final XdmValue returnValue) {
+        public MockXQueryFunctionBuilder withReturnValue(final AtomicValue returnValue) {
             this.resultValue = returnValue;
             return this;
         }
 
         public void done() {
-            MockXQueryFunctionBuilder.this.processor.registerExtensionFunction(new ExtensionFunction() {
+            MockXQueryFunctionBuilder.this.processor.registerExtensionFunction(new ExtensionFunctionDefinition() {
                 @Override
-                public QName getName() {
-                    return new QName(MockXQueryFunctionBuilder.this.namespaceURI, MockXQueryFunctionBuilder.this.functionName);
-                }
-
-                @Override
-                public SequenceType getResultType() {
-                    return MockXQueryFunctionBuilder.this.resultType;
+                public StructuredQName getFunctionQName() {
+                    return new StructuredQName(
+                            MockXQueryFunctionBuilder.this.prefix,
+                            MockXQueryFunctionBuilder.this.namespaceURI,
+                            MockXQueryFunctionBuilder.this.functionName
+                    );
                 }
 
                 @Override
@@ -95,11 +113,19 @@ public final class XQueryTestContext {
                 }
 
                 @Override
-                public XdmValue call(XdmValue[] xdmValues) throws SaxonApiException {
-                    // We are currently throwing away the actual arguments passed to our
-                    // mock function and simply returning a value each time.
-                    // How should we inspect the arguments? ArgumentCaptor of some sort?
-                    return MockXQueryFunctionBuilder.this.resultValue;
+                public SequenceType getResultType(net.sf.saxon.value.SequenceType[] sequenceTypes) {
+                    return MockXQueryFunctionBuilder.this.resultType;
+                }
+
+                @Override
+                public ExtensionFunctionCall makeCallExpression() {
+                    return new ExtensionFunctionCall() {
+                        @Override
+                        public Sequence call(XPathContext xPathContext, Sequence[] sequences) throws XPathException {
+                            //TODO Provide a way for tester to verify actual invocation arguments
+                            return MockXQueryFunctionBuilder.this.resultValue;
+                        }
+                    };
                 }
             });
         }
