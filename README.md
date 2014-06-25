@@ -28,7 +28,7 @@ There is currently no release version and this has not been pushed into any publ
 
 See the tests for more examples, but put simply, use the provided builder to stub your functions. Optionally you can maintain a reference to each stubbed function and after executing your XQuery you can inspect the function to see what parameters it was called with and how many times it was called. Useful for asserts in unit tests.
 
-Let's take this example XQuery document:
+Let's take this example XQuery document `hello_with_arg.xqy`:
 ```xquery
 declare namespace example = "http://example/";
 example:hello("World!")
@@ -42,8 +42,8 @@ public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryEx
             .withNamespaceURI("http://example/")
             .withPrefix("example")
             .withFunctionName("hello")
-            .withFunctionSignature(XQueryConstants.SIGNATURE_ARGUMENTS_SINGLE_STRING)
-            .withReturnType(XQueryConstants.RETURN_TYPE_SINGLE_STRING)
+            .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
+            .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
             .withReturnValue(new StringValue("Hello World!"))
             .done();
 

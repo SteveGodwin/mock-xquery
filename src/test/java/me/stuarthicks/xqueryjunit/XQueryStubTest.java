@@ -21,8 +21,8 @@ public class XQueryStubTest {
                 .withNamespaceURI("http://example/")
                 .withPrefix("example")
                 .withFunctionName("hello")
-                .withFunctionSignature(XQueryConstants.SIGNATURE_ARGUMENTS_NONE)
-                .withReturnType(XQueryConstants.RETURN_TYPE_SINGLE_STRING)
+                .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
+                .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("Hello World!"))
                 .done();
 
@@ -37,8 +37,8 @@ public class XQueryStubTest {
                 .withNamespaceURI("http://example/")
                 .withPrefix("example")
                 .withFunctionName("hello")
-                .withFunctionSignature(XQueryConstants.SIGNATURE_ARGUMENTS_SINGLE_STRING)
-                .withReturnType(XQueryConstants.RETURN_TYPE_SINGLE_STRING)
+                .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
+                .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("Hello World!"))
                 .done();
 
