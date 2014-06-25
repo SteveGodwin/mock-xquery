@@ -1,5 +1,6 @@
 package me.stuarthicks.xqueryjunit;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import net.sf.saxon.value.StringValue;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,23 @@ public class XQueryStubTest {
         assertEquals(1, hello.getNumberOfInvocations());
 
         assertEquals("Hello World!", result);
+    }
+
+    @Ignore // TODO Saxon loads builtins before it loads extensions
+    @Test
+    public void itShouldBeAbleToReplaceBuiltins() throws XQueryException {
+        xq.buildXQueryFunctionStub()
+                .withNamespaceURI("http://www.w3.org/2005/xpath-functions")
+                .withPrefix("fn")
+                .withFunctionName("doc")
+                .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
+                .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
+                .withReturnValue(new StringValue("whats up"))
+                .done();
+
+        String doc = xq.evaluateXQueryFile("/fn-doc.xqy").toString();
+
+        assertEquals("whats up", doc);
     }
 
 }
