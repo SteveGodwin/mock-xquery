@@ -34,7 +34,7 @@ public class XQueryStubTest {
 
     @Test
     public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
-        xq.mockXQueryFunction()
+        XQueryFunctionStub hello = xq.mockXQueryFunction()
                 .withNamespaceURI("http://example/")
                 .withPrefix("example")
                 .withFunctionName("hello")
@@ -44,6 +44,11 @@ public class XQueryStubTest {
                 .done();
 
         String result = xq.evaluateXQueryFile("/hello_with_arg.xqy").toString();
+
+        // For some reason the quotes around the string in the XQuery doc get
+        // included in the value of the Java string for that variable :(
+        assertEquals("\"World!\"", hello.getArguments().get(0).toString());
+        assertEquals(1, hello.getNumberOfInvocations());
 
         assertEquals("Hello World!", result);
         //verify(hello).call(XQueryConstants.CALLED_WITH_PARAMS_NONE);
