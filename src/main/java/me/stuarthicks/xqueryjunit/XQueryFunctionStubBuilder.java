@@ -4,7 +4,7 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.SequenceType;
 
-public final class MockXQueryFunctionBuilder {
+public final class XQueryFunctionStubBuilder {
 
     private final Processor processor;
 
@@ -39,43 +39,43 @@ public final class MockXQueryFunctionBuilder {
         return resultValue;
     }
 
-    public MockXQueryFunctionBuilder(Processor processor) {
+    public XQueryFunctionStubBuilder(Processor processor) {
         this.processor = processor;
     }
 
-    public MockXQueryFunctionBuilder withPrefix(final String prefix) {
+    public XQueryFunctionStubBuilder withPrefix(final String prefix) {
         this.prefix = prefix;
         return this;
     }
 
-    public MockXQueryFunctionBuilder withNamespaceURI(final String namespace) {
+    public XQueryFunctionStubBuilder withNamespaceURI(final String namespace) {
         this.namespaceURI = namespace;
         return this;
     }
 
-    public MockXQueryFunctionBuilder withFunctionName(final String name) {
+    public XQueryFunctionStubBuilder withFunctionName(final String name) {
         this.functionName = name;
         return this;
     }
 
-    public MockXQueryFunctionBuilder withFunctionSignature(final SequenceType[] arguments) {
+    public XQueryFunctionStubBuilder withFunctionSignature(final SequenceType[] arguments) {
         this.argumentTypes = arguments;
         return this;
     }
 
-    public MockXQueryFunctionBuilder withReturnType(final SequenceType returnType) {
+    public XQueryFunctionStubBuilder withReturnType(final SequenceType returnType) {
         this.resultType = returnType;
         return this;
     }
 
-    public MockXQueryFunctionBuilder withReturnValue(final AtomicValue returnValue) {
+    public XQueryFunctionStubBuilder withReturnValue(final AtomicValue returnValue) {
         this.resultValue = returnValue;
         return this;
     }
 
     public XQueryFunctionStub done() {
         XQueryFunctionStub function = new XQueryFunctionStub(this);
-        MockXQueryFunctionBuilder.this.processor.registerExtensionFunction(function);
+        XQueryFunctionStubBuilder.this.processor.registerExtensionFunction(function);
         return function;
     }
 

@@ -8,16 +8,16 @@ import static org.junit.Assert.assertEquals;
 
 public class XQueryStubTest {
 
-    private XQueryTestContext xq;
+    private XQueryContext xq;
 
     @Before
     public void before() {
-        this.xq = new XQueryTestContext();
+        this.xq = new XQueryContext();
     }
 
     @Test
     public void itShouldMockNoArgFunctionReturningString() throws XQueryException {
-        xq.mockXQueryFunction()
+        xq.buildXQueryFunctionStub()
                 .withNamespaceURI("http://example/")
                 .withPrefix("example")
                 .withFunctionName("hello")
@@ -34,7 +34,7 @@ public class XQueryStubTest {
 
     @Test
     public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
-        XQueryFunctionStub hello = xq.mockXQueryFunction()
+        XQueryFunctionStub hello = xq.buildXQueryFunctionStub()
                 .withNamespaceURI("http://example/")
                 .withPrefix("example")
                 .withFunctionName("hello")

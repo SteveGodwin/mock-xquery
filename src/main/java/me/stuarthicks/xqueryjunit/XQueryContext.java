@@ -5,11 +5,11 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 
-public final class XQueryTestContext {
+public final class XQueryContext {
 
     private final Processor processor;
 
-    public XQueryTestContext() {
+    public XQueryContext() {
         this.processor = new Processor(false);
     }
 
@@ -18,18 +18,19 @@ public final class XQueryTestContext {
      * Specify all fields then call done().
      * @return
      */
-    public final MockXQueryFunctionBuilder mockXQueryFunction() {
-        return new MockXQueryFunctionBuilder(this.processor);
+    public final XQueryFunctionStubBuilder buildXQueryFunctionStub() {
+        return new XQueryFunctionStubBuilder(this.processor);
     }
 
     /**
      * Executes an XQuery file (on the classpath) including all registered
-     * mock functions, and returns the resulting document
+     * stub functions, and returns the resulting document
      * @param filename Filename as it appears on the classpath
      * @return Returns result of execution
      * @throws XQueryException
      */
     public final XdmValue evaluateXQueryFile(String filename) throws XQueryException {
+        //TODO inter-file dependencies? Do they work out of the box or do I need to scan?
         try {
             XQueryCompiler comp = this.processor.newXQueryCompiler();
             XQueryExecutable exp = comp.compile(fromResource(filename));
@@ -44,7 +45,7 @@ public final class XQueryTestContext {
     }
 
     private static final String fromResource(final String name) throws IOException {
-        return IOUtils.toString(XQueryTestContext.class.getResourceAsStream(name));
+        return IOUtils.toString(XQueryContext.class.getResourceAsStream(name));
     }
 
 }

@@ -13,11 +13,11 @@ import java.util.List;
 
 public class XQueryFunctionStub extends ExtensionFunctionDefinition {
 
-    private MockXQueryFunctionBuilder mockXQueryFunctionBuilder;
+    private XQueryFunctionStubBuilder XQueryFunctionStubBuilder;
     private XQueryFunctionCall XQueryFunctionCall = new XQueryFunctionCall();
 
-    public XQueryFunctionStub(MockXQueryFunctionBuilder mockXQueryFunctionBuilder) {
-        this.mockXQueryFunctionBuilder = mockXQueryFunctionBuilder;
+    public XQueryFunctionStub(XQueryFunctionStubBuilder XQueryFunctionStubBuilder) {
+        this.XQueryFunctionStubBuilder = XQueryFunctionStubBuilder;
     }
 
     /**
@@ -40,20 +40,20 @@ public class XQueryFunctionStub extends ExtensionFunctionDefinition {
     @Override
     public StructuredQName getFunctionQName() {
         return new StructuredQName(
-                this.mockXQueryFunctionBuilder.getPrefix(),
-                this.mockXQueryFunctionBuilder.getNamespaceURI(),
-                this.mockXQueryFunctionBuilder.getFunctionName()
+                this.XQueryFunctionStubBuilder.getPrefix(),
+                this.XQueryFunctionStubBuilder.getNamespaceURI(),
+                this.XQueryFunctionStubBuilder.getFunctionName()
         );
     }
 
     @Override
     public SequenceType[] getArgumentTypes() {
-        return this.mockXQueryFunctionBuilder.getArgumentTypes();
+        return this.XQueryFunctionStubBuilder.getArgumentTypes();
     }
 
     @Override
     public SequenceType getResultType(SequenceType[] sequenceTypes) {
-        return this.mockXQueryFunctionBuilder.getResultType();
+        return this.XQueryFunctionStubBuilder.getResultType();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class XQueryFunctionStub extends ExtensionFunctionDefinition {
         public Sequence call(XPathContext xPathContext, Sequence[] sequences) throws XPathException {
             this.arguments = sequences;
             this.numberOfInvocations++;
-            return mockXQueryFunctionBuilder.getResultValue();
+            return XQueryFunctionStubBuilder.getResultValue();
         }
     }
 }
