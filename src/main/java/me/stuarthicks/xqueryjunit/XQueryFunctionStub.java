@@ -40,20 +40,20 @@ public class XQueryFunctionStub extends ExtensionFunctionDefinition {
     @Override
     public StructuredQName getFunctionQName() {
         return new StructuredQName(
-                mockXQueryFunctionBuilder.getPrefix(),
-                mockXQueryFunctionBuilder.getNamespaceURI(),
-                mockXQueryFunctionBuilder.getFunctionName()
+                this.mockXQueryFunctionBuilder.getPrefix(),
+                this.mockXQueryFunctionBuilder.getNamespaceURI(),
+                this.mockXQueryFunctionBuilder.getFunctionName()
         );
     }
 
     @Override
     public SequenceType[] getArgumentTypes() {
-        return mockXQueryFunctionBuilder.getArgumentTypes();
+        return this.mockXQueryFunctionBuilder.getArgumentTypes();
     }
 
     @Override
     public SequenceType getResultType(SequenceType[] sequenceTypes) {
-        return mockXQueryFunctionBuilder.getResultType();
+        return this.mockXQueryFunctionBuilder.getResultType();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class XQueryFunctionStub extends ExtensionFunctionDefinition {
 
     private class XQueryFunctionCall extends ExtensionFunctionCall {
         private Sequence[] arguments = new Sequence[]{};
-        public int numberOfInvocations;
+        public int numberOfInvocations = 0;
 
         public Sequence[] getArguments() {
             return arguments;
