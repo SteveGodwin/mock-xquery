@@ -15,7 +15,9 @@ public final class XQueryContext {
 
     /**
      * Entry point to the creation of an xquery function stub.
-     * Specify all fields then call done().
+     * Specify all fields then call done(). The created function
+     * is automatically registered to the XQueryContext and will
+     * exist in the environment when some XQuery is next evaluated.
      * @return
      */
     public final XQueryFunctionStubBuilder buildXQueryFunctionStub() {

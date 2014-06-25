@@ -29,7 +29,6 @@ public class XQueryStubTest {
         String result = xq.evaluateXQueryFile("/hello.xqy").toString();
 
         assertEquals("Hello World!", result);
-        //verify(hello).call(XQueryConstants.CALLED_WITH_PARAMS_NONE);
     }
 
     @Test
@@ -51,7 +50,6 @@ public class XQueryStubTest {
         assertEquals(1, hello.getNumberOfInvocations());
 
         assertEquals("Hello World!", result);
-        //verify(hello).call(XQueryConstants.CALLED_WITH_PARAMS_NONE);
     }
 
 }
