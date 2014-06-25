@@ -4,7 +4,7 @@ License: Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
 ## What is this?
 
-A way to run XQuery within a Java app using Saxon, and to provide stub methods to stand-in for external functions that aren't present (such as the XQuery extensions provided by MarkLogic).
+A way to run [XQuery](http://www.w3.org/XML/Query/) within a Java app using [Saxon](http://saxon.sourceforge.net/), and to provide stub methods to stand-in for external functions that aren't present (such as the XQuery extensions provided by [MarkLogic](http://www.marklogic.com/)).
 
 ## Why?
 
