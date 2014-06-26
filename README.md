@@ -50,7 +50,7 @@ public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryEx
 
     String result = xq.evaluateXQueryFile("/hello_with_arg.xqy").toString();
 
-    assertEquals("\"World!\"", hello.getArguments().get(0).toString());
+    assertEquals("World!", hello.getArguments().get(0).toString());
     assertEquals(1, hello.getNumberOfInvocations());
 
     assertEquals("Hello World!", result);
