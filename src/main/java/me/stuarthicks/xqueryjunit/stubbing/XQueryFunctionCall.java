@@ -5,6 +5,7 @@ import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.StringValue;
 
 import java.util.Arrays;
@@ -38,6 +39,8 @@ public class XQueryFunctionCall extends ExtensionFunctionCall {
         for (Sequence s : sequences) {
             if (s instanceof StringValue) {
                 items.add(((StringValue) s).asString());
+            } else if (s instanceof Int64Value) {
+                items.add(((Int64Value)s).asBigInteger().intValue());
             } else {
                 items.add(s);
             }
