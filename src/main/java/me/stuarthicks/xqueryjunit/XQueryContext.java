@@ -1,5 +1,7 @@
 package me.stuarthicks.xqueryjunit;
 
+import me.stuarthicks.xqueryjunit.exceptions.XQueryException;
+import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStubBuilder;
 import net.sf.saxon.s9api.*;
 import org.apache.commons.io.IOUtils;
 
@@ -29,7 +31,7 @@ public final class XQueryContext {
      * stub functions, and returns the resulting document
      * @param filename Filename as it appears on the classpath
      * @return Returns result of execution
-     * @throws XQueryException
+     * @throws me.stuarthicks.xqueryjunit.exceptions.XQueryException
      */
     public final XdmValue evaluateXQueryFile(String filename) throws XQueryException {
         //TODO inter-file dependencies? Do they work out of the box or do I need to scan?

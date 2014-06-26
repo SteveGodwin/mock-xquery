@@ -1,12 +1,14 @@
 package me.stuarthicks.xqueryjunit;
 
+import me.stuarthicks.xqueryjunit.exceptions.XQueryException;
+import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStub;
 import net.sf.saxon.value.StringValue;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class XQueryStubTest {
+public class XQueryStubbingTest {
 
     private XQueryContext xq;
 

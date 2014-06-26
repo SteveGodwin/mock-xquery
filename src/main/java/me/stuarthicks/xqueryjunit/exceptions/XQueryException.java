@@ -1,4 +1,4 @@
-package me.stuarthicks.xqueryjunit;
+package me.stuarthicks.xqueryjunit.exceptions;
 
 public class XQueryException extends Exception {
 

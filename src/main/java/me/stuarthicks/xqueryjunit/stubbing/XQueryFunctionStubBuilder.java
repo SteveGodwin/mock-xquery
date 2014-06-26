@@ -1,4 +1,4 @@
-package me.stuarthicks.xqueryjunit;
+package me.stuarthicks.xqueryjunit.stubbing;
 
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.value.AtomicValue;

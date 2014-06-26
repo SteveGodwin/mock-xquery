@@ -1,25 +1,20 @@
-package me.stuarthicks.xqueryjunit;
+package me.stuarthicks.xqueryjunit.stubbing;
 
-import com.google.common.collect.Lists;
-import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
-import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
-import net.sf.saxon.value.StringValue;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class XQueryFunctionStub extends ExtensionFunctionDefinition {
 
     private XQueryFunctionStubBuilder XQueryFunctionStubBuilder;
-    private XQueryFunctionCall XQueryFunctionCall = new XQueryFunctionCall();
+    private XQueryFunctionCall XQueryFunctionCall;
 
     public XQueryFunctionStub(XQueryFunctionStubBuilder XQueryFunctionStubBuilder) {
         this.XQueryFunctionStubBuilder = XQueryFunctionStubBuilder;
+        this.XQueryFunctionCall = new XQueryFunctionCall(this.XQueryFunctionStubBuilder);
     }
 
     /**
@@ -63,34 +58,4 @@ public class XQueryFunctionStub extends ExtensionFunctionDefinition {
         return this.XQueryFunctionCall;
     }
 
-    private class XQueryFunctionCall extends ExtensionFunctionCall {
-        private List<Object> arguments = Lists.newArrayList();
-        public int numberOfInvocations = 0;
-
-        public List<Object> getArguments() {
-            return arguments;
-        }
-        public int getNumberOfInvocations() {
-            return this.numberOfInvocations;
-        }
-
-        @Override
-        public Sequence call(XPathContext xPathContext, Sequence[] sequences) throws XPathException {
-            this.arguments = sanitise(Arrays.asList(sequences));
-            this.numberOfInvocations++;
-            return XQueryFunctionStubBuilder.getResultValue();
-        }
-
-        private List<Object> sanitise(List<Sequence> sequences) {
-            List<Object> items = Lists.newArrayList();
-            for (Sequence s : sequences) {
-                if (s instanceof StringValue) {
-                    items.add(((StringValue) s).asString());
-                } else {
-                    items.add(s);
-                }
-            }
-            return items;
-        }
-    }
 }
