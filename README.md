@@ -38,6 +38,7 @@ We can stub the hello method, evaluate the document, and inspect the results wit
 ```java
 @Test
 public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
+    XQueryContext xq = new XQueryContext();
     XQueryFunctionStub hello = xq.buildXQueryFunctionStub()
             .withNamespaceURI("http://example/")
             .withPrefix("example")
@@ -55,6 +56,8 @@ public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryEx
     assertEquals("Hello World!", result);
 }
 ```
+
+Methods stubbed via the XQueryContext are automatically registered and will be present in the next call to `evaluateXQueryFile()`. There is no provided way to delete stubs, simply throw away the context and create a new one (or create the context in your before method).
 
 ## Limitations
 
