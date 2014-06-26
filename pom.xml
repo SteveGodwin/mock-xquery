@@ -10,6 +10,13 @@
   <name>xqueryjunit</name>
   <url>http://maven.apache.org</url>
 
+  <scm>
+    <connection>scm:git:ssh://git@github.com:stuarthicks/xqueryjunit.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:stuarthicks/xqueryjunit.git</developerConnection>
+    <url>https://github.com/stuarthicks/xqueryjunit</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.7</java.version>
