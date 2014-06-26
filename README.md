@@ -34,7 +34,7 @@ declare namespace example = "http://example/";
 example:hello("World!")
 ```
 
-We can stub the hello method, evaluate the document, and inspect the results with the following method:
+We can stub the hello method, evaluate the document, and inspect the results with the following technique:
 ```java
 @Test
 public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
@@ -61,4 +61,4 @@ Methods stubbed via the XQueryContext are automatically registered and will be p
 
 ## Limitations
 
-There is no way to use this library to place any core XQuery 1.0 functions, or any functions within the Saxon namespace. This is due to the fact that Saxon does not expose a way to alter the XQuery "classloader" to prioritise ExtensionFunctions over core/saxon functions. Where a function has been declared multiple times, the core version takes precedence.
+There is no way to use this library to replace any core XQuery 1.0 functions, or any functions within the Saxon namespace. This is due to the fact that Saxon does not expose a way to alter the XQuery "classloader" to prioritise ExtensionFunctions over core/saxon functions. Where a function has been declared multiple times, the core version takes precedence.
