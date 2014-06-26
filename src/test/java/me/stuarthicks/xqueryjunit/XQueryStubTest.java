@@ -44,9 +44,7 @@ public class XQueryStubTest {
 
         String result = xq.evaluateXQueryFile("/hello_with_arg.xqy").toString();
 
-        // For some reason the quotes around the string in the XQuery doc get
-        // included in the value of the Java string for that variable :(
-        assertEquals("\"World!\"", hello.getArguments().get(0).toString());
+        assertEquals("World!", hello.getArguments().get(0));
         assertEquals(1, hello.getNumberOfInvocations());
 
         assertEquals("Hello World!", result);
