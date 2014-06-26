@@ -2,6 +2,8 @@ package me.stuarthicks.xqueryjunit;
 
 import me.stuarthicks.xqueryjunit.exceptions.XQueryException;
 import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStub;
+import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStubBuilder;
+import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.StringValue;
 import org.junit.Before;
@@ -20,10 +22,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockNoArgFunctionReturningString() throws XQueryException {
-        xq.buildXQueryFunctionStub()
-                .withNamespaceURI("http://example/")
-                .withPrefix("example")
-                .withFunctionName("hello")
+        helloStubbber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("Hello World!"))
@@ -36,10 +35,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
-        XQueryFunctionStub hello = xq.buildXQueryFunctionStub()
-                .withNamespaceURI("http://example/")
-                .withPrefix("example")
-                .withFunctionName("hello")
+        XQueryFunctionStub hello = helloStubbber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("Hello World!"))
@@ -55,10 +51,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockSingleIntArgFunctionReturningInt() throws XQueryException {
-        XQueryFunctionStub hello = xq.buildXQueryFunctionStub()
-                .withNamespaceURI("http://example/")
-                .withPrefix("example")
-                .withFunctionName("hello")
+        XQueryFunctionStub hello = helloStubbber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_INT)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_INT)
                 .withReturnValue(new Int64Value(2))
@@ -67,9 +60,28 @@ public class XQueryStubbingTest {
         String result = xq.evaluateXQueryFile("/hello_with_int.xqy").toString();
 
         assertEquals(2, hello.getArguments().get(0));
-        assertEquals(1, hello.getNumberOfInvocations());
-
         assertEquals(String.valueOf(2), result);
+    }
+
+    @Test
+    public void itShouldMockSingleFloatArgFunctionReturningFloat() throws XQueryException {
+        XQueryFunctionStub hello = helloStubbber()
+                .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_FLOAT)
+                .withReturnType(XQueryConstants.RETURNS_SINGLE_FLOAT)
+                .withReturnValue(new FloatValue(3.14f))
+                .done();
+
+        String result = xq.evaluateXQueryFile("/hello_with_float.xqy").toString();
+
+        assertEquals(2.1f, hello.getArguments().get(0));
+        assertEquals(String.valueOf(3.14f), result);
+    }
+
+    private XQueryFunctionStubBuilder helloStubbber() {
+        return xq.buildXQueryFunctionStub()
+                .withNamespaceURI("http://example/")
+                .withPrefix("example")
+                .withFunctionName("hello");
     }
 
 }

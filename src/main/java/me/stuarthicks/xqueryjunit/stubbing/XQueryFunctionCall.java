@@ -5,6 +5,7 @@ import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.StringValue;
 
@@ -41,6 +42,8 @@ public class XQueryFunctionCall extends ExtensionFunctionCall {
                 items.add(((StringValue) s).asString());
             } else if (s instanceof Int64Value) {
                 items.add(((Int64Value)s).asBigInteger().intValue());
+            } else if (s instanceof FloatValue) {
+                items.add(((FloatValue)s).getFloatValue());
             } else {
                 items.add(s);
             }
