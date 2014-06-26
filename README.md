@@ -56,3 +56,6 @@ public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryEx
 }
 ```
 
+## Limitations
+
+There is no way to use this library to place any core XQuery 1.0 functions, or any functions within the Saxon namespace. This is due to the fact that Saxon does not expose a way to alter the XQuery "classloader" to prioritise ExtensionFunctions over core/saxon functions. Where a function has been declared multiple times, the core version takes precedence.
