@@ -75,7 +75,7 @@ public final class XQueryContext {
                 "declare namespace stub = \"http://stub/\";",
                 // Special cases. fn:doc() cannot be stubbed and
                 // is implemented differently in MarkLogic than Saxon
-                query.replaceAll("fn:doc\\(", "stub:doc(")
+                query.replaceAll("(?:\\W)fn:doc\\(", "stub:doc(")
         );
     }
 
