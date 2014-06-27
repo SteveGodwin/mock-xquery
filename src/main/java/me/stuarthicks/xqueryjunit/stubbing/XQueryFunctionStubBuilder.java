@@ -1,5 +1,6 @@
 package me.stuarthicks.xqueryjunit.stubbing;
 
+import net.sf.saxon.om.Sequence;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.SequenceType;
@@ -13,7 +14,7 @@ public final class XQueryFunctionStubBuilder {
     private String functionName;
     private SequenceType[] argumentTypes;
     private SequenceType resultType;
-    private AtomicValue resultValue;
+    private Sequence resultValue;
 
     public String getPrefix() {
         return prefix;
@@ -35,7 +36,7 @@ public final class XQueryFunctionStubBuilder {
         return resultType;
     }
 
-    public AtomicValue getResultValue() {
+    public Sequence getResultValue() {
         return resultValue;
     }
 
@@ -68,7 +69,7 @@ public final class XQueryFunctionStubBuilder {
         return this;
     }
 
-    public XQueryFunctionStubBuilder withReturnValue(final AtomicValue returnValue) {
+    public XQueryFunctionStubBuilder withReturnValue(final Sequence returnValue) {
         this.resultValue = returnValue;
         return this;
     }
