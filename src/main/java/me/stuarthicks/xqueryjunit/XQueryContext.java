@@ -16,14 +16,27 @@ public final class XQueryContext {
     }
 
     /**
-     * Entry point to the creation of an xquery function stub.
+     * Entry point to the creation of an XQuery function stub.
      * Specify all fields then call done(). The created function
      * is automatically registered to the XQueryContext and will
      * exist in the environment when some XQuery is next evaluated.
-     * @return
+     * @return A builder. Go, build!
      */
     public final XQueryFunctionStubBuilder buildXQueryFunctionStub() {
         return new XQueryFunctionStubBuilder(this.processor);
+    }
+
+    /**
+     * Entry point to the overriding of a core XQuery function. Currently
+     * only redefining fn:doc() is supported.
+     * @return
+     * @param prefixAndName Eg. "fn:doc"
+     */
+    public final XQueryFunctionStubBuilder buildXQueryCoreFunctionStub(String prefixAndName) {
+        return new XQueryFunctionStubBuilder(this.processor)
+                .withPrefix("stub")
+                .withNamespaceURI("http://stub/")
+                .withFunctionName(prefixAndName.substring(prefixAndName.indexOf(":")+1));
     }
 
     /**
@@ -37,7 +50,8 @@ public final class XQueryContext {
         //TODO inter-file dependencies? Do they work out of the box or do I need to scan?
         try {
             XQueryCompiler comp = this.processor.newXQueryCompiler();
-            XQueryExecutable exp = comp.compile(fromResource(filename));
+            String query = fromResource(filename);
+            XQueryExecutable exp = comp.compile(injectStubNamespace(query));
             XQueryEvaluator ev = exp.load();
             return ev.evaluate();
         } catch (SaxonApiException e) {
@@ -48,7 +62,24 @@ public final class XQueryContext {
         }
     }
 
-    private static final String fromResource(final String name) throws IOException {
+    /**
+     * Injects a "stub" namespace, then replaces certain known problematic function
+     * calls to be intercepted with that namespace. Ugly, nasty hack because Saxon
+     * doesn't let me reorder it's "path" to find ExtensionFunctions first.
+     * Ultimately, this lets me stub core functions. Should be used as last resort.
+     * @param query
+     * @return
+     */
+    private String injectStubNamespace(String query) {
+        return String.format("%s\n%s",
+                "declare namespace stub = \"http://stub/\";",
+                // Special cases. fn:doc() cannot be stubbed and
+                // is implemented differently in MarkLogic than Saxon
+                query.replaceAll("fn:doc\\(", "stub:doc(")
+        );
+    }
+
+    private static String fromResource(final String name) throws IOException {
         return IOUtils.toString(XQueryContext.class.getResourceAsStream(name));
     }
 

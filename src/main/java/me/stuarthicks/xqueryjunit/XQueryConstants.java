@@ -18,4 +18,5 @@ public final class XQueryConstants {
     public static final SequenceType RETURNS_SINGLE_STRING = SequenceType.SINGLE_STRING;
     public static final SequenceType RETURNS_SINGLE_INT = SequenceType.SINGLE_INTEGER;
     public static final SequenceType RETURNS_SINGLE_FLOAT = SequenceType.SINGLE_FLOAT;
+    public static final SequenceType RETURNS_SINGLE_NODE = SequenceType.SINGLE_NODE;
 }

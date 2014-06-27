@@ -9,6 +9,7 @@ import net.sf.saxon.value.StringValue;
 import org.junit.Before;
 import org.junit.Test;
 
+import static me.stuarthicks.xqueryjunit.SaxonHelpers.nodeFromFile;
 import static org.junit.Assert.assertEquals;
 
 public class XQueryStubbingTest {
@@ -75,6 +76,20 @@ public class XQueryStubbingTest {
 
         assertEquals(2.1f, hello.getArguments().get(0));
         assertEquals(String.valueOf(3.14f), result);
+    }
+
+    @Test
+    public void itShouldMockCoreFunctions() throws Exception {
+        XQueryFunctionStub doc = xq.buildXQueryCoreFunctionStub("fn:doc")
+                .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
+                .withReturnType(XQueryConstants.RETURNS_SINGLE_NODE)
+                .withReturnValue(nodeFromFile("/foobar.xml"))
+                .done();
+
+        String result = xq.evaluateXQueryFile("/fn-doc.xqy").toString().trim();
+
+        assertEquals("foo", doc.getArguments().get(0));
+        assertEquals("<bar/>", result);
     }
 
     private XQueryFunctionStubBuilder helloStubbber() {
