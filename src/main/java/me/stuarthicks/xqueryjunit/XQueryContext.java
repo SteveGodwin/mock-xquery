@@ -1,52 +1,60 @@
 package me.stuarthicks.xqueryjunit;
 
+import java.io.IOException;
+
 import me.stuarthicks.xqueryjunit.exceptions.XQueryException;
 import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStubBuilder;
-import net.sf.saxon.s9api.*;
-import org.apache.commons.io.IOUtils;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XQueryCompiler;
+import net.sf.saxon.s9api.XQueryEvaluator;
+import net.sf.saxon.s9api.XQueryExecutable;
+import net.sf.saxon.s9api.XdmValue;
 
-import java.io.IOException;
+import org.apache.commons.io.IOUtils;
 
 public final class XQueryContext {
 
     private final Processor processor;
 
-    public XQueryContext() {
+    public XQueryContext () {
         this.processor = new Processor(false);
     }
 
     /**
-     * Entry point to the creation of an XQuery function stub.
-     * Specify all fields then call done(). The created function
-     * is automatically registered to the XQueryContext and will
-     * exist in the environment when some XQuery is next evaluated.
+     * Entry point to the creation of an XQuery function stub. Specify all
+     * fields then call done(). The created function is automatically registered
+     * to the XQueryContext and will exist in the environment when some XQuery
+     * is next evaluated.
      * @return A builder. Go, build!
      */
-    public final XQueryFunctionStubBuilder buildXQueryFunctionStub() {
+    public final XQueryFunctionStubBuilder buildXQueryFunctionStub () {
         return new XQueryFunctionStubBuilder(this.processor);
     }
 
     /**
-     * Entry point to the overriding of a core XQuery function. Currently
-     * only redefining fn:doc() is supported.
+     * Entry point to the overriding of a core XQuery function. Currently only
+     * redefining fn:doc() is supported.
      * @return
-     * @param prefixAndName Eg. "fn:doc"
+     * @param prefixAndName
+     *            Eg. "fn:doc"
      */
-    public final XQueryFunctionStubBuilder buildXQueryCoreFunctionStub(String prefixAndName) {
+    public final XQueryFunctionStubBuilder buildXQueryCoreFunctionStub (String prefixAndName) {
         return new XQueryFunctionStubBuilder(this.processor)
                 .withPrefix("stub")
                 .withNamespaceURI("http://stub/")
-                .withFunctionName(prefixAndName.substring(prefixAndName.indexOf(":")+1));
+                .withFunctionName(prefixAndName.substring(prefixAndName.indexOf(":") + 1));
     }
 
     /**
-     * Executes an XQuery file (on the classpath) including all registered
-     * stub functions, and returns the resulting document
-     * @param filename Filename as it appears on the classpath
+     * Executes an XQuery file (on the classpath) including all registered stub
+     * functions, and returns the resulting document
+     * @param filename
+     *            Filename as it appears on the classpath
      * @return Returns result of execution
      * @throws me.stuarthicks.xqueryjunit.exceptions.XQueryException
      */
-    public final XdmValue evaluateXQueryFile(String filename) throws XQueryException {
+    public final XdmValue evaluateXQueryFile (String filename) throws XQueryException {
         //TODO inter-file dependencies? Do they work out of the box or do I need to scan?
         try {
             XQueryCompiler comp = this.processor.newXQueryCompiler();
@@ -54,32 +62,37 @@ public final class XQueryContext {
             XQueryExecutable exp = comp.compile(injectStubNamespace(query));
             XQueryEvaluator ev = exp.load();
             return ev.evaluate();
-        } catch (SaxonApiException e) {
+        }
+        catch (SaxonApiException e) {
             throw new XQueryException("An error occurred during execution of the document " + filename, e);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new XQueryException("An error occurred reading the file " + filename + " from the classpath", e);
 
         }
     }
 
     /**
-     * Injects a "stub" namespace, then replaces certain known problematic function
-     * calls to be intercepted with that namespace. Ugly, nasty hack because Saxon
-     * doesn't let me reorder it's "path" to find ExtensionFunctions first.
-     * Ultimately, this lets me stub core functions. Should be used as last resort.
+     * Injects a "stub" namespace, then replaces certain known problematic
+     * function calls to be intercepted with that namespace. Ugly, nasty hack
+     * because Saxon doesn't let me reorder it's "path" to find
+     * ExtensionFunctions first. Ultimately, this lets me stub core functions.
+     * Should be used as last resort.
      * @param query
      * @return
      */
-    private String injectStubNamespace(String query) {
+    private static String injectStubNamespace (String query) {
+        // TODO: Only do this if a core function has been stubbed
+        // and even then, only for the stubbed function(s).
         return String.format("%s\n%s",
                 "declare namespace stub = \"http://stub/\";",
                 // Special cases. fn:doc() cannot be stubbed and
                 // is implemented differently in MarkLogic than Saxon
                 query.replaceAll("(?:\\W)fn:doc\\(", "stub:doc(")
-        );
+                );
     }
 
-    private static String fromResource(final String name) throws IOException {
+    private static String fromResource (final String name) throws IOException {
         return IOUtils.toString(XQueryContext.class.getResourceAsStream(name));
     }
 
