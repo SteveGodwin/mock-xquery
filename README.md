@@ -38,27 +38,46 @@ We can stub the hello method, evaluate the document, and inspect the results wit
 ```java
 @Test
 public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryException {
-    XQueryContext xq = new XQueryContext();
-    XQueryFunctionStub hello = xq.buildXQueryFunctionStub()
-            .withNamespaceURI("http://example/")
-            .withPrefix("example")
-            .withFunctionName("hello")
-            .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
-            .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
-            .withReturnValue(new StringValue("Hello World!"))
-            .done();
+  XQueryContext xq = new XQueryContext();
+  XQueryFunctionStub hello = xq.buildXQueryFunctionStub()
+    .withNamespaceURI("http://example/")
+    .withPrefix("example")
+    .withFunctionName("hello")
+    .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
+    .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
+    .withReturnValue(new StringValue("Hello World!"))
+    .done();
 
-    String result = xq.evaluateXQueryFile("/hello_with_arg.xqy").toString();
+  String result = xq.evaluateXQueryFile("/hello_with_arg.xqy").toString();
 
-    assertEquals("World!", hello.getArguments().get(0).toString());
-    assertEquals(1, hello.getNumberOfInvocations());
+  assertEquals("World!", hello.getArguments().get(0).toString());
+  assertEquals(1, hello.getNumberOfInvocations());
 
-    assertEquals("Hello World!", result);
+  assertEquals("Hello World!", result);
+}
+```
+
+What if you want to do something icky like stub out a core xquery function like fn:doc()? Well you can! (but please, use it as a last resort)
+```java
+@Test
+public void itShouldMockCoreFunctions () throws Exception {
+  XQueryFunctionStub doc = this.xq.buildXQueryCoreFunctionStub("fn:doc")
+    .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
+    .withReturnType(XQueryConstants.RETURNS_SINGLE_NODE)
+    .withReturnValue(nodeFromFile("/foobar.xml"))
+    .done();
+
+  String result = this.xq.evaluateXQueryFile("/fn-doc.xqy").toString().trim();
+
+  assertEquals("foo", doc.getArguments().get(0));
+  assertEquals("<bar/>", result);
 }
 ```
 
 Methods stubbed via the XQueryContext are automatically registered and will be present in the next call to `evaluateXQueryFile()`. There is no provided way to delete stubs, simply throw away the context and create a new one (or create the context in your before method).
 
+Also worth noting, calling withReturnValue multiple times in the builder causes each one to be remembered and played back by the stub function in order (with the last one repeated if the stub is called additional times). This is intended to match the behaviour you see in mockito.
+
 ## Limitations
 
-There is no way to use this library to replace any core XQuery 1.0 functions, or any functions within the Saxon namespace. This is due to the fact that Saxon does not expose a way to alter the XQuery "classloader" to prioritise ExtensionFunctions over core/saxon functions. Where a function has been declared multiple times, the core version takes precedence.
+The way I'm currently stubbbing out core functions is a hack. Don't expect it to be reliable and use it as a last resort. See issue #4 for progress on this.
