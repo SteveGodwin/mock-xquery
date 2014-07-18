@@ -23,7 +23,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockNoArgFunctionReturningString () throws XQueryException {
-        helloStubbber()
+        helloStubber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("Hello World!"))
@@ -36,7 +36,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockSingleStringArgFunctionReturningString () throws XQueryException {
-        XQueryFunctionStub hello = helloStubbber()
+        XQueryFunctionStub hello = helloStubber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("Hello World!"))
@@ -52,7 +52,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockSingleIntArgFunctionReturningInt () throws XQueryException {
-        XQueryFunctionStub hello = helloStubbber()
+        XQueryFunctionStub hello = helloStubber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_INT)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_INT)
                 .withReturnValue(new Int64Value(2))
@@ -66,7 +66,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldMockSingleFloatArgFunctionReturningFloat () throws XQueryException {
-        XQueryFunctionStub hello = helloStubbber()
+        XQueryFunctionStub hello = helloStubber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_FLOAT)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_FLOAT)
                 .withReturnValue(new FloatValue(3.14f))
@@ -94,7 +94,7 @@ public class XQueryStubbingTest {
 
     @Test
     public void itShouldAllowMultipleReturnValuesAndSettleOnLast () throws Exception {
-        helloStubbber()
+        helloStubber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
                 .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
                 .withReturnValue(new StringValue("A"))
@@ -107,7 +107,7 @@ public class XQueryStubbingTest {
 
     }
 
-    private XQueryFunctionStubBuilder helloStubbber () {
+    private XQueryFunctionStubBuilder helloStubber () {
         return this.xq.buildXQueryFunctionStub()
                 .withNamespaceURI("http://example/")
                 .withPrefix("example")

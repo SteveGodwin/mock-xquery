@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 public final class XQueryContext {
 
     private final Processor processor;
+    private boolean stubNamespaceRequired = false;
 
     public XQueryContext () {
         this.processor = new Processor(false);
@@ -40,6 +41,7 @@ public final class XQueryContext {
      *            Eg. "fn:doc"
      */
     public final XQueryFunctionStubBuilder buildXQueryCoreFunctionStub (String prefixAndName) {
+        this.stubNamespaceRequired = true;
         return new XQueryFunctionStubBuilder(this.processor)
                 .withPrefix("stub")
                 .withNamespaceURI("http://stub/")
@@ -52,12 +54,27 @@ public final class XQueryContext {
      * @param filename
      *            Filename as it appears on the classpath
      * @return Returns result of execution
-     * @throws me.stuarthicks.xqueryjunit.exceptions.XQueryException
+     * @throws XQueryException
      */
     public final XdmValue evaluateXQueryFile (String filename) throws XQueryException {
+        return evaluateXQueryFile(filename, "1.0");
+    }
+
+    /**
+     * Executes an XQuery file (on the classpath) under a given version of
+     * XQuery
+     * @param filename
+     *            Filename as it appears on the classpath
+     * @param xqueryVersion
+     *            Must be "1.0" or "3.0"
+     * @return Returns result of execution
+     * @throws XQueryException
+     */
+    public final XdmValue evaluateXQueryFile (String filename, String xqueryVersion) throws XQueryException {
         //TODO inter-file dependencies? Do they work out of the box or do I need to scan?
         try {
             XQueryCompiler comp = this.processor.newXQueryCompiler();
+            comp.setLanguageVersion(xqueryVersion);
             String query = fromResource(filename);
             XQueryExecutable exp = comp.compile(injectStubNamespace(query));
             XQueryEvaluator ev = exp.load();
@@ -81,13 +98,11 @@ public final class XQueryContext {
      * @param query
      * @return
      */
-    private static String injectStubNamespace (String query) {
-        // TODO: Only do this if a core function has been stubbed
-        // and even then, only for the stubbed function(s).
+    private String injectStubNamespace (String query) {
+        // FIXME: Replace this hack with a uri resolver
+        if (!this.stubNamespaceRequired) return query;
         return String.format("%s\n%s",
                 "declare namespace stub = \"http://stub/\";",
-                // Special cases. fn:doc() cannot be stubbed and
-                // is implemented differently in MarkLogic than Saxon
                 query.replaceAll("(?:\\W)fn:doc\\(", "stub:doc(")
                 );
     }
