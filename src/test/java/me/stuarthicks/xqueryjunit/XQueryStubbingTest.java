@@ -14,6 +14,10 @@ import org.junit.Test;
 
 public class XQueryStubbingTest {
 
+    private static final String NAMESPACE = "http://example/";
+    private static final String PREFIX = "example";
+    private static final String FNAME = "hello";
+
     private XQueryContext xq;
 
     @Before
@@ -107,11 +111,25 @@ public class XQueryStubbingTest {
 
     }
 
+    @Test
+    public void itShouldBeAbleToCallSpecificFunctionInXQueryFile () throws Exception {
+        helloStubber()
+                .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
+                .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
+                .withReturnValue(new StringValue("Hello World!"))
+                .done();
+
+        String result = this.xq.callXQueryFunction("/hello_in_lib_function.xqy", NAMESPACE, "hi", null).head().getStringValue();
+
+        assertEquals("Hello World!", result);
+
+    }
+
     private XQueryFunctionStubBuilder helloStubber () {
         return this.xq.buildXQueryFunctionStub()
-                .withNamespaceURI("http://example/")
-                .withPrefix("example")
-                .withFunctionName("hello");
+                .withNamespaceURI(NAMESPACE)
+                .withPrefix(PREFIX)
+                .withFunctionName(FNAME);
     }
 
 }

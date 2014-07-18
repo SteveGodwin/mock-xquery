@@ -4,12 +4,17 @@ import java.io.IOException;
 
 import me.stuarthicks.xqueryjunit.exceptions.XQueryException;
 import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStubBuilder;
+import net.sf.saxon.expr.instruct.UserFunction;
+import net.sf.saxon.om.Sequence;
+import net.sf.saxon.query.StaticQueryContext;
+import net.sf.saxon.query.XQueryExpression;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XQueryCompiler;
 import net.sf.saxon.s9api.XQueryEvaluator;
 import net.sf.saxon.s9api.XQueryExecutable;
 import net.sf.saxon.s9api.XdmValue;
+import net.sf.saxon.trans.XPathException;
 
 import org.apache.commons.io.IOUtils;
 
@@ -80,12 +85,22 @@ public final class XQueryContext {
             XQueryEvaluator ev = exp.load();
             return ev.evaluate();
         }
-        catch (SaxonApiException e) {
+        catch (SaxonApiException | IOException e) {
             throw new XQueryException("An error occurred during execution of the document " + filename, e);
         }
-        catch (IOException e) {
-            throw new XQueryException("An error occurred reading the file " + filename + " from the classpath", e);
+    }
 
+    public final Sequence callXQueryFunction (String filename, String namespaceURI, String functionName, Sequence[] args) throws XQueryException {
+        Sequence[] actualArgs = (args == null) ? new Sequence[] {} : args;
+        try {
+            StaticQueryContext sqc = this.processor.getUnderlyingConfiguration().newStaticQueryContext();
+            XQueryExpression exp = sqc.compileQuery(fromResource(filename));
+            int numOfArgs = (args == null) ? 0 : args.length;
+            UserFunction function = exp.getStaticContext().getUserDefinedFunction(namespaceURI, functionName, numOfArgs);
+            return function.call(actualArgs, exp.newController());
+        }
+        catch (XPathException | IOException e) {
+            throw new XQueryException("Unable to call function " + namespaceURI + ":" + functionName, e);
         }
     }
 
