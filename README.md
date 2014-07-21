@@ -1,4 +1,4 @@
-xqueryjunit
+xquery-stubbing
 ============
 License: Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -19,7 +19,7 @@ There is currently no release version and this has not been pushed into any publ
 ```xml
 <dependency>
   <groupId>me.stuarthicks</groupId>
-  <artifactId>xqueryjunit</artifactId>
+  <artifactId>xquery-stubbing</artifactId>
   <version>1-SNAPSHOT</version>
 </dependency>
 ```
