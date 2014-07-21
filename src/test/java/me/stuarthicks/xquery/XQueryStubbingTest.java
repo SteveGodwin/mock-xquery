@@ -1,10 +1,12 @@
-package me.stuarthicks.xqueryjunit;
+package me.stuarthicks.xquery;
 
-import static me.stuarthicks.xqueryjunit.SaxonHelpers.nodeFromFile;
+import static me.stuarthicks.xquery.SaxonHelpers.nodeFromFile;
 import static org.junit.Assert.assertEquals;
-import me.stuarthicks.xqueryjunit.exceptions.XQueryException;
-import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStub;
-import me.stuarthicks.xqueryjunit.stubbing.XQueryFunctionStubBuilder;
+import me.stuarthicks.xquery.XQueryConstants;
+import me.stuarthicks.xquery.XQueryContext;
+import me.stuarthicks.xquery.exceptions.XQueryException;
+import me.stuarthicks.xquery.stubbing.XQueryFunctionStub;
+import me.stuarthicks.xquery.stubbing.XQueryFunctionStubBuilder;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.StringValue;

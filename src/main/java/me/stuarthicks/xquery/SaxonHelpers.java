@@ -1,4 +1,4 @@
-package me.stuarthicks.xqueryjunit;
+package me.stuarthicks.xquery;
 
 import net.sf.saxon.om.DocumentInfo;
 import net.sf.saxon.s9api.Processor;

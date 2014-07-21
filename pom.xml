@@ -1,21 +1,38 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>me.stuarthicks</groupId>
-  <artifactId>xqueryjunit</artifactId>
+  <artifactId>xquery-stubbing</artifactId>
   <version>1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>xqueryjunit</name>
-  <url>http://maven.apache.org</url>
+  <name>xquery-stubbing</name>
+  <url>http://github.com/stuarthicks/xquery-stubbinb</url>
 
   <scm>
-    <connection>scm:git:ssh://git@github.com:stuarthicks/xqueryjunit.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:stuarthicks/xqueryjunit.git</developerConnection>
-    <url>https://github.com/stuarthicks/xqueryjunit</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:git@github.com:stuarthicks/xquery-stubbinb.git</connection>
+    <developerConnection>scm:git:git@github.com:stuarthicks/xquery-stubbing.git</developerConnection>
+    <url>http://github.com/stuarthicks/xquery-stubbing</url>
   </scm>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Stuart Hicks</name>
+      <email>xquery-stubbing@stuarthicks.me</email>
+      <organization>n/a</organization>
+      <organizationUrl>https://github.com/stuarthicks</organizationUrl>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

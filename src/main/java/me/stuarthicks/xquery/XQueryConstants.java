@@ -1,4 +1,4 @@
-package me.stuarthicks.xqueryjunit;
+package me.stuarthicks.xquery;
 
 import net.sf.saxon.value.SequenceType;
 

@@ -1,4 +1,4 @@
-package me.stuarthicks.xqueryjunit.stubbing;
+package me.stuarthicks.xquery.stubbing;
 
 import java.util.Arrays;
 import java.util.List;
