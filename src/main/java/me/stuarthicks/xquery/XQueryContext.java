@@ -2,7 +2,6 @@ package me.stuarthicks.xquery;
 
 import java.io.IOException;
 
-import me.stuarthicks.xquery.exceptions.XQueryException;
 import me.stuarthicks.xquery.stubbing.XQueryFunctionStubBuilder;
 import net.sf.saxon.expr.instruct.UserFunction;
 import net.sf.saxon.om.Sequence;
