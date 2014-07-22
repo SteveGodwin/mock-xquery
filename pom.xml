@@ -17,7 +17,7 @@
   <url>http://github.com/stuarthicks/xquery-stubbinb</url>
 
   <scm>
-    <connection>scm:git:git@github.com:stuarthicks/xquery-stubbinb.git</connection>
+    <connection>scm:git:git@github.com:stuarthicks/xquery-stubbing.git</connection>
     <developerConnection>scm:git:git@github.com:stuarthicks/xquery-stubbing.git</developerConnection>
     <url>http://github.com/stuarthicks/xquery-stubbing</url>
     <tag>HEAD</tag>
