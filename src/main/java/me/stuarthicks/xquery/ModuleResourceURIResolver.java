@@ -38,10 +38,9 @@ public class ModuleResourceURIResolver implements ModuleURIResolver {
         List<String> locationHints = Arrays.asList(locations);
         for (String hint : locationHints) {
             InputStream stream = ModuleResourceURIResolver.class.getResourceAsStream(hint);
-            if (stream != null) {
-                StreamSource streamSource = new StreamSource(stream);
-                return new StreamSource[] { streamSource };
-            }
+            if (null == stream) continue;
+            StreamSource streamSource = new StreamSource(stream);
+            return new StreamSource[] { streamSource };
         }
         return null;
     }
