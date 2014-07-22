@@ -14,13 +14,13 @@ Primarily for testing purposes. My use-case is to write tests for XQuery intende
 
 ### Maven dependency
 
-There is currently no release version and this has not been pushed into any public maven repository. Build locally then include the following dependency in your pom.xml:
+xquery-stubbing is available in maven-central! The latest stable release is:
 
 ```xml
 <dependency>
   <groupId>me.stuarthicks</groupId>
   <artifactId>xquery-stubbing</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
