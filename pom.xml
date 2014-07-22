@@ -14,7 +14,7 @@
   <packaging>jar</packaging>
 
   <name>xquery-stubbing</name>
-  <url>http://github.com/stuarthicks/xquery-stubbinb</url>
+  <url>http://github.com/stuarthicks/xquery-stubbing</url>
 
   <scm>
     <connection>scm:git:git@github.com:stuarthicks/xquery-stubbing.git</connection>
