@@ -36,7 +36,7 @@ public class ModuleResourceURIResolver implements ModuleURIResolver {
     public StreamSource[] resolve (String moduleURI, String baseURI, String[] locations) throws XPathException {
         List<String> locationHints = Arrays.asList(locations);
         for (String hint : locationHints) {
-            InputStream stream = XQueryContext.class.getResourceAsStream(hint);
+            InputStream stream = ModuleResourceURIResolver.class.getResourceAsStream(hint);
             if (stream != null) {
                 StreamSource streamSource = new StreamSource(stream);
                 return new StreamSource[] { streamSource };

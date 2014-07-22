@@ -25,7 +25,7 @@ public final class XQueryContext {
     public XQueryContext () {
         Processor p = new Processor(false);
         p.getUnderlyingConfiguration().setModuleURIResolver(new ModuleResourceURIResolver());
-        //p.getUnderlyingConfiguration().setURIResolver(new ResourceUriResolver);
+        p.getUnderlyingConfiguration().setURIResolver(new ResourceURIResolver());
         this.processor = p;
     }
 

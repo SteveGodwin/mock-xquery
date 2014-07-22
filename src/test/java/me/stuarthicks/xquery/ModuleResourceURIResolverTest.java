@@ -15,7 +15,7 @@ public class ModuleResourceURIResolverTest {
     private static final String MODULE_URI = "http://example";
     private static final String BASE_URI = "http://another-example";
 
-    ModuleResourceURIResolver underTest;
+    private ModuleResourceURIResolver underTest;
 
     @Before
     public void before () {
@@ -26,7 +26,7 @@ public class ModuleResourceURIResolverTest {
     public void itShouldReturnNullIfDocumentNotInResources () throws Exception {
         assertNull(this.underTest.resolve(MODULE_URI, BASE_URI, new String[] { "/nothing-to-see-here.txt" }));
     }
-    
+
     @Test
     public void itShouldReturnStreamOfFileThatIsInResources () throws Exception {
         //Contents of file "something-here.txt"
