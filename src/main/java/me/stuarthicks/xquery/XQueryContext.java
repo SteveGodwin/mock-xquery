@@ -124,5 +124,4 @@ public final class XQueryContext {
     private static String fromResource (final String name) throws IOException {
         return IOUtils.toString(XQueryContext.class.getResourceAsStream(name));
     }
-
 }
