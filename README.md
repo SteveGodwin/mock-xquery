@@ -57,27 +57,10 @@ public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryEx
 }
 ```
 
-What if you want to do something icky like stub out a core xquery function like fn:doc()? Well you can! (but please, use it as a last resort)
-```java
-@Test
-public void itShouldMockCoreFunctions () throws Exception {
-  XQueryFunctionStub doc = this.xq.buildXQueryCoreFunctionStub("fn:doc")
-    .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
-    .withReturnType(XQueryConstants.RETURNS_SINGLE_NODE)
-    .withReturnValue(nodeFromFile("/foobar.xml"))
-    .done();
-
-  String result = this.xq.evaluateXQueryFile("/fn-doc.xqy").toString().trim();
-
-  assertEquals("foo", doc.getArguments().get(0));
-  assertEquals("<bar/>", result);
-}
-```
-
 Methods stubbed via the XQueryContext are automatically registered and will be present in the next call to `evaluateXQueryFile()`. There is no provided way to delete stubs, simply throw away the context and create a new one (or create the context in your before method).
 
 Also worth noting, calling withReturnValue multiple times in the builder causes each one to be remembered and played back by the stub function in order (with the last one repeated if the stub is called additional times). This is intended to match the behaviour you see in mockito.
 
 ## Limitations
 
-The way I'm currently stubbbing out core functions is a hack. Don't expect it to be reliable and use it as a last resort. See issue #4 for progress on this.
+URI Resolvers have been implemented to allow document operations and imports to work normally (suggestion: use multiple `at` hints), but they aren't extensively tested. Please report any issues you have with those functions.
