@@ -20,7 +20,6 @@ import org.apache.commons.io.IOUtils;
 public final class XQueryContext {
 
     private final Processor processor;
-    private boolean stubNamespaceRequired = false;
 
     public XQueryContext () {
         Processor p = new Processor(false);
@@ -38,21 +37,6 @@ public final class XQueryContext {
      */
     public final XQueryFunctionStubBuilder buildXQueryFunctionStub () {
         return new XQueryFunctionStubBuilder(this.processor);
-    }
-
-    /**
-     * Entry point to the overriding of a core XQuery function. Currently only
-     * redefining fn:doc() is supported.
-     * @return
-     * @param prefixAndName
-     *            Eg. "fn:doc"
-     */
-    public final XQueryFunctionStubBuilder buildXQueryCoreFunctionStub (String prefixAndName) {
-        this.stubNamespaceRequired = true;
-        return new XQueryFunctionStubBuilder(this.processor)
-                .withPrefix("stub")
-                .withNamespaceURI("http://stub/")
-                .withFunctionName(prefixAndName.substring(prefixAndName.indexOf(":") + 1));
     }
 
     /**
@@ -78,12 +62,11 @@ public final class XQueryContext {
      * @throws XQueryException
      */
     public final XdmValue evaluateXQueryFile (String filename, String xqueryVersion) throws XQueryException {
-        //TODO inter-file dependencies? Do they work out of the box or do I need to scan?
         try {
             XQueryCompiler comp = this.processor.newXQueryCompiler();
             comp.setLanguageVersion(xqueryVersion);
             String query = fromResource(filename);
-            XQueryExecutable exp = comp.compile(injectStubNamespace(query));
+            XQueryExecutable exp = comp.compile(query);
             XQueryEvaluator ev = exp.load();
             return ev.evaluate();
         }
@@ -104,24 +87,6 @@ public final class XQueryContext {
         catch (XPathException | IOException e) {
             throw new XQueryException("Unable to call function " + namespaceURI + ":" + functionName, e);
         }
-    }
-
-    /**
-     * Injects a "stub" namespace, then replaces certain known problematic
-     * function calls to be intercepted with that namespace. Ugly, nasty hack
-     * because Saxon doesn't let me reorder it's "path" to find
-     * ExtensionFunctions first. Ultimately, this lets me stub core functions.
-     * Should be used as last resort.
-     * @param query
-     * @return
-     */
-    private String injectStubNamespace (String query) {
-        // FIXME: Replace this hack with a uri resolver
-        if (!this.stubNamespaceRequired) return query;
-        return String.format("%s\n%s",
-                "declare namespace stub = \"http://stub/\";",
-                query.replaceAll("(?:\\W)fn:doc\\(", "stub:doc(")
-                );
     }
 
     private static String fromResource (final String name) throws IOException {

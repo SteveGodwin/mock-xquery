@@ -84,20 +84,6 @@ public class XQueryStubbingTest {
     }
 
     @Test
-    public void itShouldMockCoreFunctions () throws Exception {
-        XQueryFunctionStub doc = this.xq.buildXQueryCoreFunctionStub("fn:doc")
-                .withFunctionSignature(XQueryConstants.ARGUMENTS_SINGLE_STRING)
-                .withReturnType(XQueryConstants.RETURNS_SINGLE_NODE)
-                .withReturnValue(nodeFromFile("/foobar.xml"))
-                .done();
-
-        String result = this.xq.evaluateXQueryFile("/fn-doc.xqy").toString().trim();
-
-        assertEquals("foo", doc.getArguments().get(0));
-        assertEquals("<bar/>", result);
-    }
-
-    @Test
     public void itShouldAllowMultipleReturnValuesAndSettleOnLast () throws Exception {
         helloStubber()
                 .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
