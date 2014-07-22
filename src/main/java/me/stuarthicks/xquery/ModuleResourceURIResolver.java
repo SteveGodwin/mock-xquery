@@ -9,7 +9,7 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.lib.ModuleURIResolver;
 import net.sf.saxon.trans.XPathException;
 
-public class ResourceURIResolver implements ModuleURIResolver {
+public class ModuleResourceURIResolver implements ModuleURIResolver {
 
     private static final long serialVersionUID = -7507064066181935105L;
 

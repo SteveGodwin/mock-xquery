@@ -23,7 +23,10 @@ public final class XQueryContext {
     private boolean stubNamespaceRequired = false;
 
     public XQueryContext () {
-        this.processor = new Processor(false);
+        Processor p = new Processor(false);
+        p.getUnderlyingConfiguration().setModuleURIResolver(new ModuleResourceURIResolver());
+        //p.getUnderlyingConfiguration().setURIResolver(new ResourceUriResolver);
+        this.processor = p;
     }
 
     /**

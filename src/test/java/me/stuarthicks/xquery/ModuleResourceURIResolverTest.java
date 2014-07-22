@@ -10,16 +10,16 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ResourceURIResolverTest {
+public class ModuleResourceURIResolverTest {
 
     private static final String MODULE_URI = "http://example";
     private static final String BASE_URI = "http://another-example";
 
-    ResourceURIResolver underTest;
+    ModuleResourceURIResolver underTest;
 
     @Before
     public void before () {
-        this.underTest = new ResourceURIResolver();
+        this.underTest = new ModuleResourceURIResolver();
     }
 
     @Test
