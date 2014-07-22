@@ -1,9 +1,6 @@
 package me.stuarthicks.xquery;
 
-import static me.stuarthicks.xquery.SaxonHelpers.nodeFromFile;
 import static org.junit.Assert.assertEquals;
-import me.stuarthicks.xquery.XQueryConstants;
-import me.stuarthicks.xquery.XQueryContext;
 import me.stuarthicks.xquery.stubbing.XQueryFunctionStub;
 import me.stuarthicks.xquery.stubbing.XQueryFunctionStubBuilder;
 import net.sf.saxon.value.FloatValue;

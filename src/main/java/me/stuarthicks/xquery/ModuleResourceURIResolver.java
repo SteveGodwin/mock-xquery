@@ -31,7 +31,8 @@ public class ModuleResourceURIResolver implements ModuleURIResolver {
      *            relative URI appearing in the query against the base URI of
      *            the query.
      */
-    @SuppressWarnings("resource") // Saxon promises the close the stream for us
+    @SuppressWarnings("resource")
+    // Saxon promises the close the stream for us
     @Override
     public StreamSource[] resolve (String moduleURI, String baseURI, String[] locations) throws XPathException {
         List<String> locationHints = Arrays.asList(locations);

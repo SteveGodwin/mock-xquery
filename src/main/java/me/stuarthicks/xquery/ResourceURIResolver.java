@@ -9,7 +9,8 @@ import javax.xml.transform.stream.StreamSource;
 
 public class ResourceURIResolver implements URIResolver {
 
-    @SuppressWarnings("resource") // Saxon promises to close this for us
+    // Saxon promises to close this for us
+    @SuppressWarnings("resource")
     @Override
     public Source resolve (String href, String base) throws TransformerException {
         InputStream resource = ResourceURIResolver.class.getResourceAsStream(base);

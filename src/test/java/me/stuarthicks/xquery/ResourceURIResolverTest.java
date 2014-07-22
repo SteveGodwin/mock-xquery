@@ -9,11 +9,10 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class ResourceURIResolverTest {
 
     private static final String HREF = "http://example";
-    
+
     private ResourceURIResolver underTest;
 
     @Before
@@ -27,7 +26,7 @@ public class ResourceURIResolverTest {
     }
 
     @Test
-    public void itReturnsStreamOfFileIfThere() throws Exception {
+    public void itReturnsStreamOfFileIfThere () throws Exception {
         String expected = "why not zoidberg?";
 
         StreamSource actual = (StreamSource) this.underTest.resolve(HREF, "/something-here.txt");
