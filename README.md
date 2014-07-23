@@ -1,5 +1,5 @@
 xquery-stubbing
-============
+===============
 License: Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
 ## What is this?
@@ -57,10 +57,41 @@ public void itShouldMockSingleStringArgFunctionReturningString() throws XQueryEx
 }
 ```
 
+What if your xquery file is a library file and only contains function definitions? Well you can also call a function in the document and unit-test it's output alone. Let's take the following XQuery document:
+
+```xquery
+declare namespace example = "http://example/";
+
+declare function example:hi() {
+    example:hello()
+};
+
+"no-op"
+```
+
+In this case, we want to stub `example:hello()` and test it by calling `example:hi()`. We can do that like this:
+
+```java
+@Test
+public void itShouldBeAbleToCallSpecificFunctionInXQueryFile () throws Exception {
+  helloStubber()
+    .withFunctionSignature(XQueryConstants.ARGUMENTS_NONE)
+    .withReturnType(XQueryConstants.RETURNS_SINGLE_STRING)
+    .withReturnValue(new StringValue("Hello World!"))
+    .done();
+
+  String result = this.xq.callXQueryFunction("/hello_in_lib_function.xqy", NAMESPACE, "hi", null).head().getStringValue();
+
+  assertEquals("Hello World!", result);
+}
+```
+
+This allows a lot of flexibility in testing small chunks of XQuery and if you keep you external dependencies untangled from your code, you should be able to minimise the amount of stubbing needed.
+
 Methods stubbed via the XQueryContext are automatically registered and will be present in the next call to `evaluateXQueryFile()`. There is no provided way to delete stubs, simply throw away the context and create a new one (or create the context in your before method).
 
 Also worth noting, calling withReturnValue multiple times in the builder causes each one to be remembered and played back by the stub function in order (with the last one repeated if the stub is called additional times). This is intended to match the behaviour you see in mockito.
 
 ## Limitations
 
-URI Resolvers have been implemented to allow document operations and imports to work normally (suggestion: use multiple `at` hints), but they aren't extensively tested. Please report any issues you have with those functions.
+URI Resolvers have been implemented to allow document operations and imports to work normally (suggestion: use multiple `at` hints), but they aren't extensively tested. Please report any issues you have with those functions. There are also kinks to be worked out regarding XQuery version declarations and the way Saxon deals with (or rather doesn't) "unknown" versions. If you're testing this with code meant for MarkLogic, you'll probably encounter problems with `xquery version "1.0-ml";`. I'll update this when I have an acceptable solution.
